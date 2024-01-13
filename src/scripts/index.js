@@ -1,3 +1,5 @@
+import "../pages/index.css";
+
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template", ".card").content;
 
@@ -14,14 +16,15 @@ function addCard(card) {
   const buttonDelete = cardElement.querySelector(".card__delete-button");
   buttonDelete.addEventListener("click", () => deleteCard(buttonDelete));
   return cardElement;
-}
+};
 
 // @todo: Функция удаления карточки
 function deleteCard(buttonDelete) {
   buttonDelete.closest(".card").remove();
-}
+};
 
 // @todo: Вывести карточки на страницу
+import {initialCards} from "./cards.js";
 initialCards.forEach(function (element) {
   const card = {
     cardImage: element.link,
