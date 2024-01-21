@@ -15,24 +15,35 @@ function addCard(card, likeCard, openCard) {
   cardElement.querySelector(".card__title").textContent = card.cardTitle;
   const buttonDelete = cardElement.querySelector(".card__delete-button");
   buttonDelete.addEventListener("click", () => deleteCard(buttonDelete));
-  cardElement.querySelector(".card__like-button").addEventListener("click", likeCard);
-  image.addEventListener("click", openCard);
+  const buttonLike = cardElement.querySelector(".card__like-button")
+  buttonLike.addEventListener("click", () => likeCard(buttonLike));
+  image.addEventListener("click", () => openCard(card.cardImage, card.cardTitle));
   return cardElement;
-};
+} 
+
+// @todo: функция открытия карточки по клику на картинку
+function openCardImage(imageSource, titleSource) {
+  const imageBig = document.querySelector(".popup__image");
+  const caption = document.querySelector(".popup__caption");
+  imageBig.src = imageSource; 
+  imageBig.alt = 'фото ' + titleSource; 
+  caption.textContent = titleSource;
+  openModal(popupImage);
+}
 
 // @todo: Функция удаления карточки
 function deleteCard(button) {
   button.closest(".card").remove();
-};
+}
 
 // @todo: Вывести карточки на страницу
 import {initialCards} from "./cards.js";
 initialCards.forEach(function (element) {
-  const card = {
+  const currentCard = {
     cardImage: element.link,
     cardTitle: element.name 
   };
-  placesList.append(addCard(card, like, openCardImage));
+  placesList.append(addCard(currentCard, like, openCardImage));
 });
 
 // @todo: Открытие и закрытие модального окна
@@ -73,19 +84,9 @@ buttonAddProfile.addEventListener('click', () => openModal(popupNewCard));
 buttonEditProfile.addEventListener('click', () => openModal(popupEditCard));
 
 // @todo: функция лайка карточки
-function like(evt) {
-  evt.target.classList.toggle('card__like-button_is-active');
+function like(button) {
+  button.classList.toggle('card__like-button_is-active');
 };
-
-// @todo: функция открытия карточки
-function openCardImage() {
-  const image = document.querySelector(".popup__image")
-  const caption = document.querySelector(".popup__caption")
-  image.src = '';
-  image.alt = '';
-  caption.textContent = '';
-  openModal(popupImage);
-} 
 
 // @todo: форма редактирования страницы
 // Находим форму в DOM
@@ -118,13 +119,12 @@ const imageLink = formNewCard.elements.link;
 
 function AddCardFormSubmit(evt) {
   evt.preventDefault();
-  const card = {
+  const newCard = {
     cardImage: imageLink.value,
     cardTitle: placeName.value 
   };
-  placesList.prepend(addCard(card, like));
+  placesList.prepend(addCard(newCard, like, openCardImage));
   popupNewCard.classList.remove('popup_is-opened');
 };
 
 formNewCard.addEventListener('submit', AddCardFormSubmit);
-
