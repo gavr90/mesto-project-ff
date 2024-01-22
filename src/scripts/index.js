@@ -32,10 +32,10 @@ initialCards.forEach(function (element) {
 });
 
 // Импорт функций для работы с карточками
-import {addCard, like} from "./components/card.js";
+import {addCard, like} from "./card.js";
 
 // Импорт функций для работы с модальными окнами
-import {openModal, closeModal} from "./components/modal.js";
+import {openModal, closeModal} from "./modal.js";
 
 // Функция открытия карточки по клику на картинку
 function openCardImage(imageSource, titleSource) {
