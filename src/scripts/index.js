@@ -38,7 +38,13 @@ initialCards.forEach(function (element) {
 import { addCard, like } from "./card.js";
 
 // Импорт функций для работы с модальными окнами
-import { openModal, closeModal } from "./modal.js";
+import {
+  openModal,
+  clearForm,
+  closeByClick,
+  closeByEsc,
+  closeModal,
+} from "./modal.js";
 
 // Функция открытия карточки по клику на картинку
 function openCardImage(imageSource, titleSource) {
@@ -48,6 +54,8 @@ function openCardImage(imageSource, titleSource) {
   imageLarge.alt = "фото " + titleSource;
   caption.textContent = titleSource;
   openModal(popupImage);
+  popupImage.addEventListener("click", closeByClick);
+  document.addEventListener("keydown", closeByEsc);
 }
 
 //Открытие и автозаполнение формы редактирования страницы
@@ -55,6 +63,8 @@ buttonEditProfile.addEventListener("click", () => {
   openModal(popupEditCard, formEditProfile);
   nameInput.value = name.textContent;
   jobInput.value = job.textContent;
+  popupEditCard.addEventListener("click", closeByClick);
+  document.addEventListener("keydown", closeByEsc);
 });
 
 // Обработка заполнения формы редактирования страницы
@@ -62,15 +72,19 @@ function EditProfileFormSubmit(evt) {
   evt.preventDefault();
   name.textContent = nameInput.value;
   job.textContent = jobInput.value;
-  closeModal(popupEditCard, formEditProfile);
+  clearForm(formEditProfile);
+  closeModal(popupEditCard);
+  document.removeEventListener("keydown", closeByEsc);
 }
 
 formEditProfile.addEventListener("submit", EditProfileFormSubmit);
 
 // Открытие формы добавления карточки
-buttonAddCard.addEventListener("click", () =>
-  openModal(popupNewCard, formNewCard)
-);
+buttonAddCard.addEventListener("click", () => {
+  openModal(popupNewCard, formNewCard);
+  popupNewCard.addEventListener("click", closeByClick);
+  document.addEventListener("keydown", closeByEsc);
+});
 
 // Обработка заполнения формы добавления карточки
 function addCardFormSubmit(evt) {
@@ -80,7 +94,9 @@ function addCardFormSubmit(evt) {
     cardTitle: placeName.value,
   };
   placesList.prepend(addCard(newCard, like, openCardImage));
-  closeModal(popupNewCard, formNewCard);
+  clearForm(formNewCard);
+  closeModal(popupNewCard);
+  document.removeEventListener("keydown", closeByEsc);
 }
 
 formNewCard.addEventListener("submit", addCardFormSubmit);
