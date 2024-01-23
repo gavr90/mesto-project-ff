@@ -1,7 +1,10 @@
 import "../pages/index.css";
 
 // Темплейт карточки
-export const cardTemplate = document.querySelector("#card-template", ".card").content;
+export const cardTemplate = document.querySelector(
+  "#card-template",
+  ".card"
+).content;
 
 // DOM узлы
 const placesList = document.querySelector(".places__list");
@@ -22,27 +25,27 @@ const placeName = formNewCard.elements.placename;
 const imageLink = formNewCard.elements.link;
 
 // Вывести карточки на страницу
-import {initialCards} from "./cards.js";
+import { initialCards } from "./cards.js";
 initialCards.forEach(function (element) {
   const currentCard = {
     cardImage: element.link,
-    cardTitle: element.name 
+    cardTitle: element.name,
   };
   placesList.append(addCard(currentCard, like, openCardImage));
 });
 
 // Импорт функций для работы с карточками
-import {addCard, like} from "./card.js";
+import { addCard, like } from "./card.js";
 
 // Импорт функций для работы с модальными окнами
-import {openModal, closeModal} from "./modal.js";
+import { openModal, closeModal } from "./modal.js";
 
 // Функция открытия карточки по клику на картинку
 function openCardImage(imageSource, titleSource) {
   const imageLarge = document.querySelector(".popup__image");
   const caption = document.querySelector(".popup__caption");
-  imageLarge.src = imageSource; 
-  imageLarge.alt = "фото " + titleSource; 
+  imageLarge.src = imageSource;
+  imageLarge.alt = "фото " + titleSource;
   caption.textContent = titleSource;
   openModal(popupImage);
 }
@@ -65,14 +68,16 @@ function EditProfileFormSubmit(evt) {
 formEditProfile.addEventListener("submit", EditProfileFormSubmit);
 
 // Открытие формы добавления карточки
-buttonAddCard.addEventListener("click", () => openModal(popupNewCard, formNewCard));
+buttonAddCard.addEventListener("click", () =>
+  openModal(popupNewCard, formNewCard)
+);
 
 // Обработка заполнения формы добавления карточки
 function addCardFormSubmit(evt) {
   evt.preventDefault();
   const newCard = {
     cardImage: imageLink.value,
-    cardTitle: placeName.value 
+    cardTitle: placeName.value,
   };
   placesList.prepend(addCard(newCard, like, openCardImage));
   closeModal(popupNewCard, formNewCard);

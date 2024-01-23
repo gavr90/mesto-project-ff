@@ -1,4 +1,4 @@
-import {cardTemplate} from "./index.js";
+import { cardTemplate } from "./index.js";
 
 // Функция создания карточки
 function addCard(card, likeCard, openCard) {
@@ -9,20 +9,22 @@ function addCard(card, likeCard, openCard) {
   cardElement.querySelector(".card__title").textContent = card.cardTitle;
   const buttonDelete = cardElement.querySelector(".card__delete-button");
   buttonDelete.addEventListener("click", () => deleteCard(buttonDelete));
-  const buttonLike = cardElement.querySelector(".card__like-button")
+  const buttonLike = cardElement.querySelector(".card__like-button");
   buttonLike.addEventListener("click", () => likeCard(buttonLike));
-  image.addEventListener("click", () => openCard(card.cardImage, card.cardTitle));
+  image.addEventListener("click", () =>
+    openCard(card.cardImage, card.cardTitle)
+  );
   return cardElement;
-} 
+}
 
 // Функция лайка карточки
 function like(button) {
   button.classList.toggle("card__like-button_is-active");
-};
+}
 
 // Функция удаления карточки
 function deleteCard(button) {
   button.closest(".card").remove();
 }
 
-export {addCard, like, deleteCard};
+export { addCard, like, deleteCard };
