@@ -26,6 +26,8 @@ function closeByClick(evt) {
   ) {
     const activeModal = document.querySelector('.popup_is-opened');
     closeModal(activeModal);
+    const form = activeModal.querySelector('.popup__form');
+    clearForm(form);
     document.removeEventListener("keydown", closeByEsc);
   }
 }
@@ -35,6 +37,8 @@ function closeByEsc(evt) {
   if (evt.key === "Escape") {
     const activeModal = document.querySelector('.popup_is-opened');
     closeModal(activeModal);
+    const form = activeModal.querySelector('.popup__form');
+    clearForm(form);
     document.removeEventListener("keydown", closeByEsc);
   }
   console.log('Я возникаю, когда печатают в текстовом поле.')
