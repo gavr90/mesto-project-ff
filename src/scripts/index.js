@@ -40,7 +40,6 @@ import { addCard, like } from "./card.js";
 // Импорт функций для работы с модальными окнами
 import {
   openModal,
-  clearForm,
   closeByClick,
   closeByEsc,
   closeModal,
@@ -54,7 +53,7 @@ function openCardImage(imageSource, titleSource) {
   imageLarge.alt = "фото " + titleSource;
   caption.textContent = titleSource;
   openModal(popupImage);
-  popupImage.addEventListener("click", closeByClick);
+  popupImage.addEventListener("click", (evt) => closeByClick(evt, popupImage));
   document.addEventListener("keydown", closeByEsc);
 }
 
@@ -63,7 +62,7 @@ buttonEditProfile.addEventListener("click", () => {
   openModal(popupEditCard, formEditProfile);
   nameInput.value = name.textContent;
   jobInput.value = job.textContent;
-  popupEditCard.addEventListener("click", closeByClick);
+  popupEditCard.addEventListener("click", (evt) => closeByClick(evt, popupEditCard, formEditProfile));
   document.addEventListener("keydown", closeByEsc);
 });
 
@@ -72,9 +71,7 @@ function EditProfileFormSubmit(evt) {
   evt.preventDefault();
   name.textContent = nameInput.value;
   job.textContent = jobInput.value;
-  clearForm(formEditProfile);
   closeModal(popupEditCard);
-  document.removeEventListener("keydown", closeByEsc);
 }
 
 formEditProfile.addEventListener("submit", EditProfileFormSubmit);
@@ -82,7 +79,8 @@ formEditProfile.addEventListener("submit", EditProfileFormSubmit);
 // Открытие формы добавления карточки
 buttonAddCard.addEventListener("click", () => {
   openModal(popupNewCard, formNewCard);
-  popupNewCard.addEventListener("click", closeByClick);
+  formNewCard.reset();
+  popupNewCard.addEventListener("click", (evt) => closeByClick(evt, popupNewCard, formNewCard));
   document.addEventListener("keydown", closeByEsc);
 });
 
@@ -94,9 +92,8 @@ function addCardFormSubmit(evt) {
     cardTitle: placeName.value,
   };
   placesList.prepend(addCard(newCard, like, openCardImage));
-  clearForm(formNewCard);
+  formNewCard.reset();
   closeModal(popupNewCard);
-  document.removeEventListener("keydown", closeByEsc);
 }
 
 formNewCard.addEventListener("submit", addCardFormSubmit);
