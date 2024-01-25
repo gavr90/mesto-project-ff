@@ -4,6 +4,9 @@ function openModal(modalWindow) {
   setTimeout(() => {
     modalWindow.classList.add("popup_is-opened");
   });
+
+  modalWindow.addEventListener("click", (evt) => closeByClick(evt, modalWindow));
+  document.addEventListener("keydown", closeByEsc);
 }
 
 // Функция закрытия модального окна
@@ -15,8 +18,8 @@ function closeModal(modalWindow) {
 // Функция-обработчик закрытия по оверлею и кнопке "закрыть"
 function closeByClick(evt, modalWindow) {
   if (
-    (evt.currentTarget === evt.target) |
-    (evt.target.className === "popup__close")
+    (evt.currentTarget === evt.target) ||
+    (evt.target.classList.contains("popup__close"))
   ) {
     closeModal(modalWindow);
   }
@@ -30,4 +33,4 @@ function closeByEsc(evt) {
   }
 }
 
-export { openModal, closeByClick, closeByEsc, closeModal };
+export { openModal, closeModal };
