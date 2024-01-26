@@ -8,6 +8,7 @@ import { createCard, likeCard, deleteCard } from "./card.js";
 import {
   openModal,
   closeModal,
+  closeOnClick
 } from "./modal.js";
 
 
@@ -20,11 +21,15 @@ const buttonEditProfile = document.querySelector(".profile__edit-button");
 const name = document.querySelector(".profile__title");
 const job = document.querySelector(".profile__description");
 const buttonAddCard = document.querySelector(".profile__add-button");
-const popupNewCard = document.querySelector(".popup_type_new-card");
-const popupEditProfile = document.querySelector(".popup_type_edit");
-const popupImage = document.querySelector(".popup_type_image");
 const imageLarge = document.querySelector(".popup__image");
 const imagePopupCaption = document.querySelector(".popup__caption");
+
+//список попапов (модальных окон)
+const modalWindowsList = {
+  popupNewCard: document.querySelector(".popup_type_new-card"),
+  popupEditProfile: document.querySelector(".popup_type_edit"),
+  popupImage: document.querySelector(".popup_type_image")
+};
 
 // Элементы форм
 const formEditProfile = document.forms.editprofile;
@@ -50,12 +55,12 @@ function openCardImage(imageSource, titleSource) {
   imageLarge.alt = "фото " + titleSource;
   imagePopupCaption.textContent = titleSource;
 
-  openModal(popupImage);
+  openModal(modalWindowsList.popupImage);
 }
 
 //Открытие и автозаполнение формы редактирования страницы
 function openPopupEditProfile() {
-  openModal(popupEditProfile);
+  openModal(modalWindowsList.popupEditProfile);
 
   nameInput.value = name.textContent;
   jobInput.value = job.textContent;
@@ -68,12 +73,12 @@ function handleEditProfileFormSubmit(evt) {
   name.textContent = nameInput.value;
   job.textContent = jobInput.value;
 
-  closeModal(popupEditProfile);
+  closeModal(modalWindowsList.popupEditProfile);
 }
 
 // Открытие формы добавления карточки
 function openPopupNewCard() {
-  openModal(popupNewCard);
+  openModal(modalWindowsList.popupNewCard);
 }
 
 // Функция-обработчик заполнения формы добавления карточки
@@ -82,17 +87,22 @@ function handleAddCardFormSubmit(evt) {
 
   const newCard = {
     cardImage: imageLink.value,
-    cardTitle: placeName.value,
+    cardTitle: placeName.value
   };
 
   cardsContainer.prepend(createCard(newCard, likeCard, deleteCard, openCardImage));
 
   formNewCard.reset();
 
-  closeModal(popupNewCard);
+  closeModal(modalWindowsList.popupNewCard);
 }
 
 buttonEditProfile.addEventListener("click", openPopupEditProfile);
 buttonAddCard.addEventListener("click", openPopupNewCard);
 formEditProfile.addEventListener("submit", handleEditProfileFormSubmit);
 formNewCard.addEventListener("submit", handleAddCardFormSubmit);
+
+// обработчик закрытия попапов (модальных окон) по клику
+Object.values(modalWindowsList).forEach(modalWindow => {
+  modalWindow.addEventListener("click", (evt) => closeOnClick(evt, modalWindow));
+});

@@ -5,18 +5,17 @@ function openModal(modalWindow) {
     modalWindow.classList.add("popup_is-opened");
   });
 
-  modalWindow.addEventListener("click", (evt) => closeByClick(evt, modalWindow));
-  document.addEventListener("keydown", closeByEsc);
+  document.addEventListener("keydown", closeWithEsc);
 }
 
 // Функция закрытия модального окна
 function closeModal(modalWindow) {
   modalWindow.classList.remove("popup_is-opened");
-  document.removeEventListener("keydown", closeByEsc);
+  document.removeEventListener("keydown", closeWithEsc);
 }
 
 // Функция-обработчик закрытия по оверлею и кнопке "закрыть"
-function closeByClick(evt, modalWindow) {
+function closeOnClick(evt, modalWindow) {
   if (
     (evt.currentTarget === evt.target) ||
     (evt.target.classList.contains("popup__close"))
@@ -26,11 +25,11 @@ function closeByClick(evt, modalWindow) {
 }
 
 // Функция-обработчик закрытия по кнопке Esc
-function closeByEsc(evt) {
+function closeWithEsc(evt) {
   if (evt.key === "Escape") {
     const activeModal = document.querySelector('.popup_is-opened');
     closeModal(activeModal);
   }
 }
 
-export { openModal, closeModal };
+export { openModal, closeModal, closeOnClick };

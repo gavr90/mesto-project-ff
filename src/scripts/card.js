@@ -1,7 +1,7 @@
 import { cardTemplate } from "./index.js";
 
 // Функция создания карточки
-function createCard(card, onLike, onDelete, onImage) {
+function createCard(card, onLike, onDelete, onImageClick) {
   const cardElement = cardTemplate.cloneNode(true);
   const image = cardElement.querySelector(".card__image");
   const buttonDelete = cardElement.querySelector(".card__delete-button");
@@ -14,7 +14,7 @@ function createCard(card, onLike, onDelete, onImage) {
   buttonDelete.addEventListener("click", () => onDelete(buttonDelete));
   buttonLike.addEventListener("click", () => onLike(buttonLike));
   image.addEventListener("click", () =>
-    onImage(card.cardImage, card.cardTitle)
+    onImageClick(card.cardImage, card.cardTitle)
   );
 
   return cardElement;
