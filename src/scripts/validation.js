@@ -24,6 +24,17 @@ const hideInputError = (formElement, inputElement) => {
 };
 
 const checkInputValidity = (formElement, inputElement) => {
+
+//  if (inputElement.validity.patternMismatch) {
+    // данные атрибута доступны у элемента инпута через ключевое слово dataset.
+    // обратите внимание, что в js имя атрибута пишется в camelCase (да-да, в
+    // HTML мы писали в kebab-case, это не опечатка)
+//  inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+//  } else {
+// inputElement.setCustomValidity("");
+// }
+
+
   if (!inputElement.validity.valid) {
     showInputError(formElement, inputElement, inputElement.validationMessage);
   } else {
