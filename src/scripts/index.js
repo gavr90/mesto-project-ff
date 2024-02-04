@@ -11,6 +11,10 @@ import {
   closeOnClick
 } from "./modal.js";
 
+import {
+  enableValidation,
+  clearValidation
+} from "./validation.js"
 
 // Темплейт карточки
 export const cardTemplate = document.querySelector("#card-template").content;
@@ -106,3 +110,5 @@ formNewCard.addEventListener("submit", handleAddCardFormSubmit);
 Object.values(modalWindowsList).forEach(modalWindow => {
   modalWindow.addEventListener("click", (evt) => closeOnClick(evt, modalWindow));
 });
+
+enableValidation();
