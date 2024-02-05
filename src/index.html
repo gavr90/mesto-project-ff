@@ -37,9 +37,9 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="editprofile">
-        <input id="name-input" type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" minlength="2" maxlength="40" required>
+        <input id="name-input" type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" minlength="2" maxlength="40" required data-error-empty-field-message="Вы пропустили это поле." data-error-sintax-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы.">
         <span class="popup__input-error name-input-error"></span>
-        <input id="description-input" type="text" name="description" class="popup__input popup__input_type_description" placeholder="Занятие" minlength="2" maxlength="200" required>
+        <input id="description-input" type="text" name="description" class="popup__input popup__input_type_description" placeholder="Занятие" minlength="2" maxlength="200" required data-error-empty-field-message="Введите адрес сайта." >
         <span class="popup__input-error description-input-error"></span>
         <button type="submit" class="button popup__button">Сохранить</button>
       </form>
