@@ -6,10 +6,12 @@ function createCard(card, onLike, onDelete, onImageClick) {
   const image = cardElement.querySelector(".card__image");
   const buttonDelete = cardElement.querySelector(".card__delete-button");
   const buttonLike = cardElement.querySelector(".card__like-button");
+  const likeCounter = cardElement.querySelector(".card__like-counter")
 
   cardElement.querySelector(".card__title").textContent = card.cardTitle;
   image.src = card.cardImage;
   image.alt = "фото " + card.cardTitle;
+  likeCounter.textContent = card.likeNumber;
 
   buttonDelete.addEventListener("click", () => onDelete(buttonDelete));
   buttonLike.addEventListener("click", () => onLike(buttonLike));

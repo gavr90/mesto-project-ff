@@ -1,8 +1,19 @@
 import "../pages/index.css";
-import { initialCards } from "./cards.js";
+
+// Импорт функций api
+import { 
+  getProfileData,
+  editProfileData,
+  getInitialCards,
+  addCard,
+} from "./api.js";
 
 // Импорт функций для работы с карточками
-import { createCard, likeCard, deleteCard } from "./card.js";
+import { 
+  createCard, 
+  likeCard, 
+  deleteCard 
+} from "./card.js";
 
 // Импорт функций для работы с модальными окнами
 import {
@@ -43,16 +54,6 @@ const formNewCard = document.forms.newplace;
 const placeName = formNewCard.elements.placename;
 const imageLink = formNewCard.elements.link;
 
-// Вывести карточки на страницу
-initialCards.forEach(function (element) {
-  const currentCard = {
-    cardImage: element.link,
-    cardTitle: element.name,
-  };
-  cardsContainer.append(createCard(currentCard, likeCard, deleteCard, openCardImage));
-});
-
-
 // Функция открытия карточки по клику на картинку
 function openCardImage(imageSource, titleSource) {
   imageLarge.src = imageSource;
@@ -62,7 +63,19 @@ function openCardImage(imageSource, titleSource) {
   openModal(modalWindowsList.popupImage);
 }
 
-//Открытие и автозаполнение формы редактирования страницы
+// Вызов функции получения информации о профиле
+getProfileData()
+  .then((result) => {
+    console.log(result);
+    name.textContent = result.name;
+    job.textContent = result.about;
+  })
+  
+  .catch((err) => {
+    console.log(err); 
+  }); 
+
+// Открытие и автозаполнение формы редактирования страницы
 function openPopupEditProfile() {
   openModal(modalWindowsList.popupEditProfile);
   clearValidation(formEditProfile, validationConfig);
@@ -74,43 +87,78 @@ function openPopupEditProfile() {
 // Функция-обработчик заполнения формы редактирования страницы
 function handleEditProfileFormSubmit(evt) {
   evt.preventDefault();
-
-  name.textContent = nameInput.value;
-  job.textContent = jobInput.value;
-
-  closeModal(modalWindowsList.popupEditProfile);
+  
+  editProfileData(nameInput.value, jobInput.value)
+    .then((result) => {
+      name.textContent = result.name;
+      job.textContent = result.about;
+     
+      closeModal(modalWindowsList.popupEditProfile);
+    })
+    
+    .catch((err) => {
+        console.log(err); 
+    }); 
 }
+
+// Вызов функции получения карточек с сервера
+getInitialCards()
+  .then((result) => {
+    result.forEach((element) => {
+      const currentCard = {
+        cardImage: element.link,
+        cardTitle: element.name,
+        likeNumber: element.likes.length
+      };
+      cardsContainer.append(createCard(currentCard, likeCard, deleteCard, openCardImage));
+    });
+  })
+
+  .catch((err) => {
+    console.log(err); 
+  }); 
 
 // Открытие формы добавления карточки
 function openPopupNewCard() {
   openModal(modalWindowsList.popupNewCard);
   clearValidation(formNewCard, validationConfig);
-
 }
 
 // Функция-обработчик заполнения формы добавления карточки
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
-  
-  const newCard = {
-    cardImage: imageLink.value,
-    cardTitle: placeName.value
-  };
 
-  cardsContainer.prepend(createCard(newCard, likeCard, deleteCard, openCardImage));
+  // Вызов функции добавления новой карточки
+  addCard(placeName.value, imageLink.value)
+    .then((result) => {
+      console.log(result);
+      result.forEach((element) => {
+        const newCard = {
+          cardImage: element.link,
+          cardTitle: element.name,
+        };
+      });
 
-  formNewCard.reset();
-  clearValidation(formNewCard, validationConfig);
+      cardsContainer.prepend(createCard(newCard, likeCard, deleteCard, openCardImage));
 
-  closeModal(modalWindowsList.popupNewCard);
+      formNewCard.reset();
+      clearValidation(formNewCard, validationConfig);
+
+      closeModal(modalWindowsList.popupNewCard);
+    })
+
+    .catch((err) => {
+      console.log(err); 
+    }); 
 }
 
+// Слушатели событий
 buttonEditProfile.addEventListener("click", openPopupEditProfile);
 buttonAddCard.addEventListener("click", openPopupNewCard);
 formEditProfile.addEventListener("submit", handleEditProfileFormSubmit);
 formNewCard.addEventListener("submit", handleAddCardFormSubmit);
 
-// обработчик закрытия попапов (модальных окон) по клику
+// Обработчик закрытия попапов (модальных окон) по клику
 Object.values(modalWindowsList).forEach(modalWindow => {
   modalWindow.addEventListener("click", (evt) => closeOnClick(evt, modalWindow));
 });
@@ -125,3 +173,6 @@ const validationConfig = {
 };
 
 enableValidation(validationConfig);
+
+
+  
