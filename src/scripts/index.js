@@ -65,6 +65,7 @@ function openCardImage(imageSource, titleSource) {
 //Открытие и автозаполнение формы редактирования страницы
 function openPopupEditProfile() {
   openModal(modalWindowsList.popupEditProfile);
+  clearValidation(formEditProfile, validationConfig);
 
   nameInput.value = name.textContent;
   jobInput.value = job.textContent;
@@ -83,12 +84,14 @@ function handleEditProfileFormSubmit(evt) {
 // Открытие формы добавления карточки
 function openPopupNewCard() {
   openModal(modalWindowsList.popupNewCard);
+  clearValidation(formNewCard, validationConfig);
+
 }
 
 // Функция-обработчик заполнения формы добавления карточки
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
-
+  
   const newCard = {
     cardImage: imageLink.value,
     cardTitle: placeName.value
@@ -97,6 +100,7 @@ function handleAddCardFormSubmit(evt) {
   cardsContainer.prepend(createCard(newCard, likeCard, deleteCard, openCardImage));
 
   formNewCard.reset();
+  clearValidation(formNewCard, validationConfig);
 
   closeModal(modalWindowsList.popupNewCard);
 }
@@ -111,4 +115,13 @@ Object.values(modalWindowsList).forEach(modalWindow => {
   modalWindow.addEventListener("click", (evt) => closeOnClick(evt, modalWindow));
 });
 
-enableValidation();
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible"
+};
+
+enableValidation(validationConfig);
