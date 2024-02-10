@@ -54,6 +54,16 @@ const formNewCard = document.forms.newplace;
 const placeName = formNewCard.elements.placename;
 const imageLink = formNewCard.elements.link;
 
+// Настройки валидации форм
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible"
+};
+
 // Функция открытия карточки по клику на картинку
 function openCardImage(imageSource, titleSource) {
   imageLarge.src = imageSource;
@@ -62,18 +72,6 @@ function openCardImage(imageSource, titleSource) {
 
   openModal(modalWindowsList.popupImage);
 }
-
-// Вызов функции получения информации о профиле
-getProfileData()
-  .then((result) => {
-    console.log(result);
-    name.textContent = result.name;
-    job.textContent = result.about;
-  })
-  
-  .catch((err) => {
-    console.log(err); 
-  }); 
 
 // Открытие и автозаполнение формы редактирования страницы
 function openPopupEditProfile() {
@@ -101,6 +99,28 @@ function handleEditProfileFormSubmit(evt) {
     }); 
 }
 
+// Открытие формы добавления карточки
+function openPopupNewCard() {
+  openModal(modalWindowsList.popupNewCard);
+  clearValidation(formNewCard, validationConfig);
+}
+
+// Функция-обработчик заполнения формы добавления карточки
+function handleAddCardFormSubmit(evt) {
+  evt.preventDefault();
+
+// Вызов функции получения информации о профиле
+getProfileData()
+  .then((result) => {
+    console.log(result);
+    name.textContent = result.name;
+    job.textContent = result.about;
+  })
+  
+  .catch((err) => {
+    console.log(err); 
+  }); 
+
 // Вызов функции получения карточек с сервера
 getInitialCards()
   .then((result) => {
@@ -117,16 +137,6 @@ getInitialCards()
   .catch((err) => {
     console.log(err); 
   }); 
-
-// Открытие формы добавления карточки
-function openPopupNewCard() {
-  openModal(modalWindowsList.popupNewCard);
-  clearValidation(formNewCard, validationConfig);
-}
-
-// Функция-обработчик заполнения формы добавления карточки
-function handleAddCardFormSubmit(evt) {
-  evt.preventDefault();
 
   // Вызов функции добавления новой карточки
   addCard(placeName.value, imageLink.value)
@@ -163,15 +173,7 @@ Object.values(modalWindowsList).forEach(modalWindow => {
   modalWindow.addEventListener("click", (evt) => closeOnClick(evt, modalWindow));
 });
 
-const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible"
-};
-
+// Вызов функции валидации
 enableValidation(validationConfig);
 
 
