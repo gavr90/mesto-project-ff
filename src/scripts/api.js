@@ -40,7 +40,7 @@ export function editProfileData (name, job) {
 }
 
 // Функция обновления аватара
-export function editProfileAvatar (avatar) {
+export function editAvatar (avatar) {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
     headers: config.headers,
@@ -91,7 +91,7 @@ export function addCard(title, url) {
 }
 
 // Функция отправки лайка
-export function addLike(cardId) {
+export function addLikeApi(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers,
@@ -104,3 +104,33 @@ export function addLike(cardId) {
       return Promise.reject(`Ошибка: ${res.status}`);
     });
 }
+
+// Функция удаления лайка
+export function removeLikeApi(cardId) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers,
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+}
+
+// Функция удаления карточки c сервера
+export function deleteCardApi(cardId) {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers,
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+} 

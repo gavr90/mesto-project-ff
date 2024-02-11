@@ -32,4 +32,14 @@ function closeWithEsc(evt) {
   }
 }
 
-export { openModal, closeModal, closeOnClick };
+// Функция уведомления о загрузке
+function renderLoading(isLoading, popup) {
+  const popupButton = popup.target.querySelector(".popup__button");
+  if(isLoading) {
+    popupButton.textContent = "Сохранение...";
+  }else{
+    popupButton.textContent = "Сохранить";
+  };
+}
+
+export { openModal, closeModal, closeOnClick, renderLoading };
