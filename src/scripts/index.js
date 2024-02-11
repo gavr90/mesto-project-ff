@@ -25,7 +25,7 @@ import {
 import {
   enableValidation,
   clearValidation
-} from "./validation.js"
+} from "./validation.js";
 
 // Темплейт карточки
 export const cardTemplate = document.querySelector("#card-template").content;
@@ -109,6 +109,30 @@ function openPopupNewCard() {
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
 
+  // Вызов функции добавления новой карточки
+  addCard(placeName.value, imageLink.value)
+    .then((result) => {
+      console.log(result);
+      result.forEach((element) => {
+        const newCard = {
+          cardImage: element.link,
+          cardTitle: element.name,
+        };
+      });
+
+      cardsContainer.prepend(createCard(newCard, likeCard, deleteCard, openCardImage));
+
+      formNewCard.reset();
+      clearValidation(formNewCard, validationConfig);
+
+      closeModal(modalWindowsList.popupNewCard);
+    })
+
+    .catch((err) => {
+      console.log(err); 
+    }); 
+}
+
 // Вызов функции получения информации о профиле
 getProfileData()
   .then((result) => {
@@ -137,30 +161,6 @@ getInitialCards()
   .catch((err) => {
     console.log(err); 
   }); 
-
-  // Вызов функции добавления новой карточки
-  addCard(placeName.value, imageLink.value)
-    .then((result) => {
-      console.log(result);
-      result.forEach((element) => {
-        const newCard = {
-          cardImage: element.link,
-          cardTitle: element.name,
-        };
-      });
-
-      cardsContainer.prepend(createCard(newCard, likeCard, deleteCard, openCardImage));
-
-      formNewCard.reset();
-      clearValidation(formNewCard, validationConfig);
-
-      closeModal(modalWindowsList.popupNewCard);
-    })
-
-    .catch((err) => {
-      console.log(err); 
-    }); 
-}
 
 // Слушатели событий
 buttonEditProfile.addEventListener("click", openPopupEditProfile);
