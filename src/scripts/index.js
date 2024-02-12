@@ -1,7 +1,7 @@
 import "../pages/index.css";
 
 // Импорт функций api
-import { 
+import {
   getProfileData,
   editAvatar,
   editProfileData,
@@ -10,24 +10,12 @@ import {
 } from "./api.js";
 
 // Импорт функций для работы с карточками
-import { 
-  createCard, 
-  likeCard, 
-  deleteCard 
-} from "./card.js";
+import { createCard, likeCard, deleteCard } from "./card.js";
 
 // Импорт функций для работы с модальными окнами
-import {
-  openModal,
-  closeModal,
-  closeOnClick,
-  renderLoading
-} from "./modal.js";
+import { openModal, closeModal, closeOnClick, renderLoading } from "./modal.js";
 
-import {
-  enableValidation,
-  clearValidation
-} from "./validation.js";
+import { enableValidation, clearValidation } from "./validation.js";
 
 // Темплейт карточки
 export const cardTemplate = document.querySelector("#card-template").content;
@@ -47,7 +35,7 @@ const modalWindowsList = {
   popupNewCard: document.querySelector(".popup_type_new-card"),
   popupEditAvatar: document.querySelector(".popup_type_edit-avatar"),
   popupEditProfile: document.querySelector(".popup_type_edit"),
-  popupImage: document.querySelector(".popup_type_image")
+  popupImage: document.querySelector(".popup_type_image"),
 };
 
 // Элементы форм
@@ -67,7 +55,7 @@ const validationConfig = {
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible"
+  errorClass: "popup__error_visible",
 };
 
 // Информация с сервера
@@ -78,7 +66,7 @@ let currentCard;
 function renderProfile(profileData) {
   name.textContent = profileData.name;
   job.textContent = profileData.job;
-  avatar.setAttribute('style', `background-image: url(${profileData.avatar})`);
+  avatar.setAttribute("style", `background-image: url(${profileData.avatar})`);
 }
 
 // Функция открытия карточки по клику на картинку
@@ -108,15 +96,15 @@ function handleEditAvatarFormSubmit(evt) {
 
       formEditAvatar.reset();
       clearValidation(formEditAvatar, validationConfig);
-     
+
       closeModal(modalWindowsList.popupEditAvatar);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-        renderLoading(false, evt);
-    })
+      renderLoading(false, evt);
+    });
 }
 
 // Открытие и автозаполнение формы редактирования страницы
@@ -132,21 +120,21 @@ function openPopupEditProfile() {
 function handleEditProfileFormSubmit(evt) {
   evt.preventDefault();
   renderLoading(true, evt);
-  
+
   // Вызов функции редактирования страницы
   editProfileData(nameInput.value, jobInput.value)
     .then((result) => {
       name.textContent = result.name;
       job.textContent = result.about;
-     
+
       closeModal(modalWindowsList.popupEditProfile);
     })
     .catch((err) => {
-        console.log(err); 
+      console.log(err);
     })
     .finally(() => {
       renderLoading(false, evt);
-  })
+    });
 }
 
 // Открытие формы добавления карточки
@@ -163,24 +151,24 @@ function handleAddCardFormSubmit(evt) {
   // Вызов функции добавления новой карточки
   addCard(placeName.value, imageLink.value)
     .then((result) => {
-      result.forEach((element) => {
-//        currentCard = {
-//          cardImage: element.link,
-//          cardTitle: element.name,
-//          likes: element.likes,
-//          cardId: element._id,
-//          userId: element.owner._id
-//        };
-//
-//        cardsContainer.prepend(createCard(currentCard, likeCard, deleteCard, openCardImage, profile));
-      });
+      currentCard = {
+        cardImage: result.link,
+        cardTitle: result.name,
+        likes: result.likes,
+        cardId: result._id,
+        userId: result.owner._id,
+      };
+
+      cardsContainer.prepend(
+        createCard(currentCard, likeCard, deleteCard, openCardImage, profile)
+      );
     })
     .catch((err) => {
-      console.log(err); 
+      console.log(err);
     })
     .finally(() => {
       renderLoading(false, evt);
-    })
+    });
 
   formNewCard.reset();
   clearValidation(formNewCard, validationConfig);
@@ -195,7 +183,7 @@ Promise.all([getProfileData(), getInitialCards()])
       name: result[0].name,
       job: result[0].about,
       avatar: result[0].avatar,
-      myId: result[0]._id
+      myId: result[0]._id,
     };
 
     renderProfile(profile);
@@ -206,15 +194,17 @@ Promise.all([getProfileData(), getInitialCards()])
         cardTitle: element.name,
         likes: element.likes,
         cardId: element._id,
-        userId: element.owner._id
+        userId: element.owner._id,
       };
-      
-      cardsContainer.append(createCard(currentCard, likeCard, deleteCard, openCardImage, profile));
+
+      cardsContainer.append(
+        createCard(currentCard, likeCard, deleteCard, openCardImage, profile)
+      );
     });
   })
   .catch((err) => {
-    console.log(err); 
-  }); 
+    console.log(err);
+  });
 
 // Слушатели событий
 avatar.addEventListener("click", openPopupEditAvatar);
@@ -225,11 +215,11 @@ formEditProfile.addEventListener("submit", handleEditProfileFormSubmit);
 formNewCard.addEventListener("submit", handleAddCardFormSubmit);
 
 // Обработчик закрытия попапов (модальных окон) по клику
-Object.values(modalWindowsList).forEach(modalWindow => {
-  modalWindow.addEventListener("click", (evt) => closeOnClick(evt, modalWindow));
+Object.values(modalWindowsList).forEach((modalWindow) => {
+  modalWindow.addEventListener("click", (evt) =>
+    closeOnClick(evt, modalWindow)
+  );
 });
 
 // Вызов функции валидации
 enableValidation(validationConfig);
-
-

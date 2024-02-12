@@ -17,8 +17,8 @@ function closeModal(modalWindow) {
 // Функция-обработчик закрытия по оверлею и кнопке "закрыть"
 function closeOnClick(evt, modalWindow) {
   if (
-    (evt.currentTarget === evt.target) ||
-    (evt.target.classList.contains("popup__close"))
+    evt.currentTarget === evt.target ||
+    evt.target.classList.contains("popup__close")
   ) {
     closeModal(modalWindow);
   }
@@ -27,7 +27,7 @@ function closeOnClick(evt, modalWindow) {
 // Функция-обработчик закрытия по кнопке Esc
 function closeWithEsc(evt) {
   if (evt.key === "Escape") {
-    const activeModal = document.querySelector('.popup_is-opened');
+    const activeModal = document.querySelector(".popup_is-opened");
     closeModal(activeModal);
   }
 }
@@ -35,11 +35,11 @@ function closeWithEsc(evt) {
 // Функция уведомления о загрузке
 function renderLoading(isLoading, popup) {
   const popupButton = popup.target.querySelector(".popup__button");
-  if(isLoading) {
+  if (isLoading) {
     popupButton.textContent = "Сохранение...";
-  }else{
+  } else {
     popupButton.textContent = "Сохранить";
-  };
+  }
 }
 
 export { openModal, closeModal, closeOnClick, renderLoading };

@@ -1,136 +1,139 @@
 const config = {
-  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-6',
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-6",
   headers: {
-    authorization: '082e08bb-025b-4df2-b295-077ece50e46f',
-    'Content-Type': 'application/json'
-  }
-}
+    authorization: "082e08bb-025b-4df2-b295-077ece50e46f",
+    "Content-Type": "application/json",
+  },
+};
 
 // Функция получения информации о профиле
-export function getProfileData () {
+function getProfileData() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
 }
 
 // Функция редактирования профиля
-export function editProfileData (name, job) {
+function editProfileData(name, job) {
   return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
       name: name,
       about: job,
-    })
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+    }),
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
 }
 
 // Функция обновления аватара
-export function editAvatar (avatar) {
+function editAvatar(avatar) {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
-      "avatar": avatar,
-    })
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+      avatar: avatar,
+    }),
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
 }
 
 // Функция получения карточек с сервера
-export function getInitialCards() {
+function getInitialCards() {
   return fetch(`${config.baseUrl}/cards`, {
-    headers: config.headers
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+    headers: config.headers,
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
 }
 
 // Функция добавления карточки
-export function addCard(title, url) {
+function addCard(title, url) {
   return fetch(`${config.baseUrl}/cards`, {
-    method: 'POST',
+    method: "POST",
     headers: config.headers,
     body: JSON.stringify({
       name: title,
-      link: url
-    })
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+      link: url,
+    }),
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
 }
 
 // Функция отправки лайка
-export function addLikeApi(cardId) {
+function addLikeApi(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: config.headers,
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
 }
 
 // Функция удаления лайка
-export function removeLikeApi(cardId) {
+function removeLikeApi(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: config.headers,
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
 }
 
 // Функция удаления карточки c сервера
-export function deleteCardApi(cardId) {
+function deleteCardApi(cardId) {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: config.headers,
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-} 
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
+}
+
+export {
+  getProfileData,
+  editProfileData,
+  editAvatar,
+  getInitialCards,
+  addCard,
+  addLikeApi,
+  removeLikeApi,
+  deleteCardApi,
+};
