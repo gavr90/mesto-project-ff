@@ -71,8 +71,15 @@ const validationConfig = {
 };
 
 // Информация с сервера
-let myId;
-let cardIds = [];
+let profile;
+let currentCard;
+
+// Функция отображения информации о профиле
+function renderProfile(profileData) {
+  name.textContent = profileData.name;
+  job.textContent = profileData.job;
+  avatar.setAttribute('style', `background-image: url(${profileData.avatar})`);
+}
 
 // Функция открытия карточки по клику на картинку
 function openCardImage(imageSource, titleSource) {
@@ -157,17 +164,16 @@ function handleAddCardFormSubmit(evt) {
   addCard(placeName.value, imageLink.value)
     .then((result) => {
       result.forEach((element) => {
-        const newCard = {
-          cardImage: element.link,
-          cardTitle: element.name,
-        };
+//        currentCard = {
+//          cardImage: element.link,
+//          cardTitle: element.name,
+//          likes: element.likes,
+//          cardId: element._id,
+//          userId: element.owner._id
+//        };
+//
+//        cardsContainer.prepend(createCard(currentCard, likeCard, deleteCard, openCardImage, profile));
       });
-      cardsContainer.prepend(createCard(newCard, likeCard, deleteCard, openCardImage, true, element._id));
-
-      formNewCard.reset();
-      clearValidation(formNewCard, validationConfig);
-
-      closeModal(modalWindowsList.popupNewCard);
     })
     .catch((err) => {
       console.log(err); 
@@ -175,38 +181,36 @@ function handleAddCardFormSubmit(evt) {
     .finally(() => {
       renderLoading(false, evt);
     })
+
+  formNewCard.reset();
+  clearValidation(formNewCard, validationConfig);
+
+  closeModal(modalWindowsList.popupNewCard);
 }
 
-// Вызов функции получения информации о профиле
-getProfileData()
+// Вызов функций отображения профиля и карточек с сервера
+Promise.all([getProfileData(), getInitialCards()])
   .then((result) => {
-    name.textContent = result.name;
-    job.textContent = result.about;
-    avatar.setAttribute('style', `background-image: url(${result.avatar})`);
-    myId = result._id;
-  })
-  
-  .catch((err) => {
-    console.log(err); 
-  }); 
+    profile = {
+      name: result[0].name,
+      job: result[0].about,
+      avatar: result[0].avatar,
+      myId: result[0]._id
+    };
 
-// Вызов функции получения карточек с сервера
-getInitialCards()
-  .then((result) => {
-    result.forEach((element) => {
-      const currentCard = {
+    renderProfile(profile);
+
+    result[1].forEach((element) => {
+      currentCard = {
         cardImage: element.link,
         cardTitle: element.name,
-        likeNumber: element.likes.length
+        likes: element.likes,
+        cardId: element._id,
+        userId: element.owner._id
       };
-      if(element.owner._id !== myId){
-        cardsContainer.append(createCard(currentCard, likeCard, deleteCard, openCardImage, false, element._id));
-      }else{
-        cardsContainer.append(createCard(currentCard, likeCard, deleteCard, openCardImage, true, element._id));
-      };
-      cardIds.push(element._id);
+      
+      cardsContainer.append(createCard(currentCard, likeCard, deleteCard, openCardImage, profile));
     });
-    console.log(cardIds);
   })
   .catch((err) => {
     console.log(err); 

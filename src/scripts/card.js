@@ -6,23 +6,28 @@ import {
 } from "./api.js";
 
 // Функция создания карточки
-function createCard(card, onLike, onDelete, onImageClick, isMine, cardId) {
+function createCard(card, onLike, onDelete, onImageClick, profileData) {
   const cardElement = cardTemplate.cloneNode(true);
   const image = cardElement.querySelector(".card__image");
   const buttonDelete = cardElement.querySelector(".card__delete-button");
   const buttonLike = cardElement.querySelector(".card__like-button");
-  const likeCounter = cardElement.querySelector(".card__like-counter")
+  const likeCounter = cardElement.querySelector(".card__like-counter");
 
   cardElement.querySelector(".card__title").textContent = card.cardTitle;
   image.src = card.cardImage;
   image.alt = "фото " + card.cardTitle;
-  likeCounter.textContent = card.likeNumber;
-  if (isMine) {
-    buttonDelete.addEventListener("click", () => onDelete(cardId));
+  likeCounter.textContent = card.likes.length;
+  // проверка, ставился ли лайк
+  if ((card.likes.find(item => item._id == profileData.myId) && true) || false) {
+    buttonLike.classList.add("card__like-button_is-active");
+  };
+  // проверка, моя ли карточка
+  if (card.userId === profileData.myId) {
+    buttonDelete.addEventListener("click", () => onDelete(buttonDelete, card.cardId));
   }else{
     buttonDelete.setAttribute("style", "display: none");
-  }
-  buttonLike.addEventListener("click", () => onLike(buttonLike, cardId));
+  };
+  buttonLike.addEventListener("click", () => onLike(buttonLike, card.cardId));
   image.addEventListener("click", () =>
     onImageClick(card.cardImage, card.cardTitle)
   );
@@ -36,7 +41,6 @@ function likeCard(button, id) {
     removeLikeApi(id)
       .then((result) => {
         console.log(result);
-        console.log(button.closest(".card"));
       })
       .catch((err) => {
         console.log(err); 
@@ -45,12 +49,11 @@ function likeCard(button, id) {
     addLikeApi(id)
       .then((result) => {
         console.log(result);
-        console.log(button.closest(".card"));
       })
       .catch((err) => {
         console.log(err); 
       })
-  }
+  };
   button.classList.toggle("card__like-button_is-active");
 }
 
@@ -63,7 +66,7 @@ function deleteCard(button, id) {
     .catch((err) => {
       console.log(err); 
     })
-//  button.closest(".card").remove();
+  button.closest(".card").remove();
 }
 
 export { createCard, likeCard, deleteCard };
