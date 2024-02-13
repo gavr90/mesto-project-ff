@@ -1,7 +1,6 @@
 const regex = /[^а-яa-z\-\sё]/gi;
 
-
-export function enableValidation(config) {
+function enableValidation(config) {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
 
   formList.forEach((formElement) => {
@@ -12,47 +11,64 @@ export function enableValidation(config) {
   });
 }
 
-export function clearValidation(form, config) {
-  const errorElementlist = form.querySelectorAll('.' + config.inputErrorClass);
+function clearValidation(form, config) {
+  const inputElementList = form.querySelectorAll(config.inputSelector);
+  const errorElementList = form.querySelectorAll("." + config.errorClass);
   const buttonElement = form.querySelector(config.submitButtonSelector);
-  errorElementlist.forEach((errorElement) => {
-    if (errorElement.classList.contains(config.errorClass)) {
-          errorElement.classList.remove(config.errorClass);
-        }
-  })
-  buttonElement.classList.add(config.inactiveButtonClass); 
+  inputElementList.forEach((inputElement) => {
+    if (inputElement.classList.contains(config.inputErrorClass)) {
+      inputElement.classList.remove(config.inputErrorClass);
+    }
+  });
+  errorElementList.forEach((errorElement) => {
+    if (errorElement.classList.contains(config.errorClassVisible)) {
+      errorElement.classList.remove(config.errorClassVisible);
+    }
+  });
+  buttonElement.classList.add(config.inactiveButtonClass);
 }
 
 function showInputError(formElement, inputElement, errorMessage, config) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  errorElement.classList.add(config.errorClass);
+  errorElement.classList.add(config.errorClassVisible);
   errorElement.textContent = errorMessage;
+  inputElement.classList.add(config.inputErrorClass);
 }
 
 function hideInputError(formElement, inputElement, config) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  errorElement.classList.remove(config.errorClass);
+  errorElement.classList.remove(config.errorClassVisible);
   errorElement.textContent = "";
+  inputElement.classList.remove(config.inputErrorClass);
 }
 
 function checkInputValidity(formElement, inputElement, config) {
   if (inputElement.type === "text") {
     if (inputElement.value.match(regex)) {
       inputElement.setCustomValidity(inputElement.dataset.errorSintaxMessage);
-      } else {
-        inputElement.setCustomValidity("");
-      }  
+      inputElement.classList.add(config.inputErrorClass);
+    } else {
+      inputElement.setCustomValidity("");
+      inputElement.classList.remove(config.inputErrorClass);
+    }
   }
-  
+
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, config);
+    showInputError(
+      formElement,
+      inputElement,
+      inputElement.validationMessage,
+      config
+    );
   } else {
     hideInputError(formElement, inputElement, config);
   }
 }
 
 function setEventListeners(formElement, config) {
-  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+  const inputList = Array.from(
+    formElement.querySelectorAll(config.inputSelector)
+  );
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
 
   inputList.forEach((inputElement) => {
@@ -63,13 +79,13 @@ function setEventListeners(formElement, config) {
   });
 }
 
-function hasInvalidInput (inputList) {
+function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
-  })
+  });
 }
 
-function toggleButtonState (inputList, buttonElement, config) {
+function toggleButtonState(inputList, buttonElement, config) {
   if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(config.inactiveButtonClass);
   } else {
@@ -77,3 +93,4 @@ function toggleButtonState (inputList, buttonElement, config) {
   }
 }
 
+export { enableValidation, clearValidation };
