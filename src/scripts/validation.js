@@ -13,12 +13,13 @@ export function enableValidation(config) {
 }
 
 export function clearValidation(form, config) {
-  const errorElement = form.querySelector('.' + config.inputErrorClass);
+  const errorElementlist = form.querySelectorAll('.' + config.inputErrorClass);
   const buttonElement = form.querySelector(config.submitButtonSelector);
-
-  if (errorElement.classList.contains(config.errorClass)) {
-    errorElement.classList.remove(config.errorClass);
-  }
+  errorElementlist.forEach((errorElement) => {
+    if (errorElement.classList.contains(config.errorClass)) {
+          errorElement.classList.remove(config.errorClass);
+        }
+  })
   buttonElement.classList.add(config.inactiveButtonClass); 
 }
 

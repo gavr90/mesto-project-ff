@@ -1,0 +1,5 @@
+.card__like-counter {
+  grid-column: 2/3;
+  justify-self: center;
+  font-size: 13px;
+}
