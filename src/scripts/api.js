@@ -1,3 +1,5 @@
+import { checkResponse } from "./utils";
+
 const config = {
   baseUrl: "https://nomoreparties.co/v1/wff-cohort-6",
   headers: {
@@ -10,13 +12,7 @@ const config = {
 function getProfileData() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 // Функция редактирования профиля
@@ -28,13 +24,7 @@ function editProfileData(name, job) {
       name: name,
       about: job,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 // Функция обновления аватара
@@ -45,26 +35,14 @@ function editAvatar(avatar) {
     body: JSON.stringify({
       avatar: avatar,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 // Функция получения карточек с сервера
 function getInitialCards() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 // Функция добавления карточки
@@ -76,13 +54,7 @@ function addCard(title, url) {
       name: title,
       link: url,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 // Функция отправки лайка
@@ -90,13 +62,7 @@ function addLikeApi(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 // Функция удаления лайка
@@ -104,13 +70,7 @@ function removeLikeApi(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 // Функция удаления карточки c сервера
@@ -118,13 +78,7 @@ function deleteCardApi(cardId) {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 export {

@@ -2,6 +2,7 @@ const regex = /[^а-яa-z\-\sё]/gi;
 
 function enableValidation(config) {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
+  const buttonList = Array.from(document.querySelectorAll(config.submitButtonSelector));
 
   formList.forEach((formElement) => {
     formElement.addEventListener("submit", function (evt) {
@@ -9,12 +10,15 @@ function enableValidation(config) {
     });
     setEventListeners(formElement, config);
   });
+
+  buttonList.forEach((buttonElement) => {
+    buttonElement.setAttribute("disabled", "disabled");
+  });
 }
 
-function clearValidation(form, config) {
-  const inputElementList = form.querySelectorAll(config.inputSelector);
-  const errorElementList = form.querySelectorAll("." + config.errorClass);
-  const buttonElement = form.querySelector(config.submitButtonSelector);
+function clearValidation(formElement, config) {
+  const inputElementList = formElement.querySelectorAll(config.inputSelector);
+  const errorElementList = formElement.querySelectorAll("." + config.errorClass);
   inputElementList.forEach((inputElement) => {
     if (inputElement.classList.contains(config.inputErrorClass)) {
       inputElement.classList.remove(config.inputErrorClass);
@@ -25,7 +29,6 @@ function clearValidation(form, config) {
       errorElement.classList.remove(config.errorClassVisible);
     }
   });
-  buttonElement.classList.add(config.inactiveButtonClass);
 }
 
 function showInputError(formElement, inputElement, errorMessage, config) {
@@ -74,7 +77,7 @@ function setEventListeners(formElement, config) {
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
       checkInputValidity(formElement, inputElement, config);
-      toggleButtonState(inputList, buttonElement, config);
+      toggleButtonState(inputList, buttonElement);
     });
   });
 }
@@ -85,11 +88,11 @@ function hasInvalidInput(inputList) {
   });
 }
 
-function toggleButtonState(inputList, buttonElement, config) {
+function toggleButtonState(inputList, buttonElement) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(config.inactiveButtonClass);
+    buttonElement.setAttribute("disabled", "disabled");
   } else {
-    buttonElement.classList.remove(config.inactiveButtonClass);
+    buttonElement.removeAttribute("disabled", "disabled");
   }
 }
 

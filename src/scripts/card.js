@@ -1,5 +1,6 @@
-import { cardTemplate } from "./index.js";
 import { addLikeApi, removeLikeApi, deleteCardApi } from "./api.js";
+
+const cardTemplate = document.querySelector("#card-template").content;
 
 // Функция создания карточки
 function createCard(card, onLike, onDelete, onImageClick, profileData) {
@@ -44,6 +45,7 @@ function likeCard(button, counter, id) {
     removeLikeApi(id)
       .then((result) => {
         counter.textContent = result.likes.length;
+        button.classList.toggle("card__like-button_is-active");
       })
       .catch((err) => {
         console.log(err);
@@ -52,12 +54,12 @@ function likeCard(button, counter, id) {
     addLikeApi(id)
       .then((result) => {
         counter.textContent = result.likes.length;
+        button.classList.toggle("card__like-button_is-active");
       })
       .catch((err) => {
         console.log(err);
       });
   }
-  button.classList.toggle("card__like-button_is-active");
 }
 
 // Функция удаления карточки

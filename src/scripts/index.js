@@ -17,9 +17,6 @@ import { openModal, closeModal, closeOnClick, renderLoading } from "./modal.js";
 
 import { enableValidation, clearValidation } from "./validation.js";
 
-// Темплейт карточки
-export const cardTemplate = document.querySelector("#card-template").content;
-
 // DOM узлы
 const cardsContainer = document.querySelector(".places__list");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
@@ -82,7 +79,6 @@ function openCardImage(imageSource, titleSource) {
 // Открытие формы изменения аватара
 function openPopupEditAvatar() {
   openModal(modalWindowsList.popupEditAvatar);
-  clearValidation(formEditAvatar, validationConfig);
 }
 
 // Функция-обработчик заполнения формы изменения аватара
@@ -141,7 +137,6 @@ function handleEditProfileFormSubmit(evt) {
 // Открытие формы добавления карточки
 function openPopupNewCard() {
   openModal(modalWindowsList.popupNewCard);
-  clearValidation(formNewCard, validationConfig);
 }
 
 // Функция-обработчик заполнения формы добавления карточки
@@ -163,6 +158,12 @@ function handleAddCardFormSubmit(evt) {
       cardsContainer.prepend(
         createCard(currentCard, likeCard, deleteCard, openCardImage, profile)
       );
+
+      formNewCard.reset();
+      clearValidation(formNewCard, validationConfig);
+    
+      closeModal(modalWindowsList.popupNewCard);
+    
     })
     .catch((err) => {
       console.log(err);
@@ -170,11 +171,6 @@ function handleAddCardFormSubmit(evt) {
     .finally(() => {
       renderLoading(false, evt);
     });
-
-  formNewCard.reset();
-  clearValidation(formNewCard, validationConfig);
-
-  closeModal(modalWindowsList.popupNewCard);
 }
 
 // Вызов функций отображения профиля и карточек с сервера
